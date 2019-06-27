@@ -1,0 +1,94 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+struct person1
+{
+    char  numbe[10];//学生编号
+    char name[10];//学生姓名
+    char college[10];//学院
+}person1[5];
+struct person2
+{
+    char name[10];//裁判姓名
+    int score[10];//学生成绩
+    char numbe[10];//学生编号
+    float average;//平均成绩
+}person2[5];
+int main(int argc, const char * argv[])
+{
+    ifstream in1("/Users/s20181106117/Desktop/in1.txt ");
+    ifstream in2("/Users/s20181106117/Desktop/in2.txt ");
+    ofstream out("/Users/s20181106117/Desktop/out.txt ");
+    if(in1.is_open())
+        {
+        for(int i=0;i<5;i++)
+        {
+            in1>>person1[i].numbe;//输入学生编号
+            in1>>person1[i].name;//输入学生姓名
+            in1>>person1[i].college;//输入学院
+        }
+        //cout<<person1<<" "<<endl;
+        in1.close();
+    }
+    if(in2.is_open())
+        {
+        for(int i=0;i<5;i++)
+            {
+                in2>>person2[i].name;//输入裁判姓名
+            for(int j=0;j<5;j++)
+                {
+                in2>>person2[i].score[j];//输入学生成绩
+                }
+                in2>>person2[i].numbe;//输入学生编号
+            }
+        //cout<<person2<<" "<<endl;
+        
+        /*for(int i=0;i<7;i++)
+        {
+            for(int j=0;j<7;j++)
+            {
+            in2>>person2[i].score[j];
+            }
+        }*/
+        for(int i=0;i<7;i++)//对输入的学生成绩进行排序
+            {
+            for(int j=0;j<7;j++)
+                {
+                if(person2[i].score[j]>person2[i+1].score[j+1])
+                    {
+                    person2[i].score[7]=person2[i].score[j];
+                    person2[i].score[j]=person2[i+1].score[j+1];
+                    person2[i+1].score[j+1]=person2[i].score[7];
+                    }
+                }
+             }
+        /*for(i=0;i<n;i++)
+            {
+            cout<<person2[i].score[i]<<" "<<endl;
+            }*/
+        int h=0;
+        for(int i=1;i<6;i++)//求平均值
+            {
+                for(int j=1;j<6;j++)
+                {
+                //h=0;
+                h=person2[i].score[j]+h;
+                }
+            }
+            int i;
+            person2[i].average=h/5;
+        //cout<<average<<endl;
+        in2.close();
+        }
+    if(out.is_open())
+    {
+        for(int i=0;i<7;i++)
+        out<<setw(10)<<person1[i].numbe
+        <<setw(10)<<person1[i].name<<setw(10)
+        <<setiosflags(ios::fixed)<<setprecision(2)
+        <<person2[i].average<<endl;
+        out.close();
+    }
+    return 0;
+    }
