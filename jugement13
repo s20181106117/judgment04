@@ -1,0 +1,114 @@
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+struct person1
+{
+    char numbe[20];//学生编号
+    char name[20];//学生姓名
+    char college[20];//学院
+    double average;
+    double average1;
+    double score[7];
+    int location;
+}person1[8];
+struct person2
+{
+    char name[10];//裁判姓名
+}person2[7];
+int main()
+{
+    ifstream in1("/Users/s20181106117/Desktop/in1.txt");
+    ifstream in2("/Users/s20181106117/Desktop/in2.txt");
+    if(in1.is_open()){
+        for(int i=0;i<8;i++)
+        {
+            in1>>person1[i].numbe;//输入学生编号
+            in1>>person1[i].name;//输入学生姓名
+            in1>>person1[i].college;//输入学院
+        }
+        in1.close();
+    }
+    if(in2.is_open())
+    {
+        for(int j=0;j<9;j++){
+            if(j==0){
+                for(int i=0;i<7;i++){
+                    in2>>person2[i].name;
+                }
+            }
+            else{
+                for(int k=0;k<7;k++){
+                    in2>>person1[j-1].score[k];
+                }
+            }
+        }
+        in2.close();
+    }
+    for(int k=0;k<8;k++){
+        for(int i=0;i<6;i++){
+            for(int j=0;j<6;j++){
+                double m;
+                if(person1[k].score[j]<person1[k].score[j+1]){
+                    m=person1[k].score[j];
+                    person1[k].score[j]=person1[k].score[j+1];
+                    person1[k].score[j+1]=m;
+                }
+            }
+        }
+    }
+    int h=0;
+    for(int i=0;i<8;i++)//求平均值
+    {
+        h=0;
+        for(int j=1;j<6;j++)
+        {
+            h=h+person1[i].score[j];
+        }
+        person1[i].average=h*1.0/5;
+        person1[i].average1=h*1.0/5;
+    }
+    for(int i=0;i<8;i++){
+        cout<<person1[i].average<<" ";
+    }
+    cout<<'\n';
+    for(int i=0;i<7;i++){
+        for(int i=0;i<7;i++){
+            double x;
+            if(person1[i].average1<person1[i+1].average1){
+                x=person1[i].average1;
+                person1[i].average1=person1[i+1].average1;
+                person1[i+1].average1=x;
+            }
+        }
+    }
+    for(int i=0;i<8;i++){
+        cout<<person1[i].average1<<" ";
+    }
+    cout<<'\n';
+    for(int i=0;i<8;i++){
+        for(int j=0;j<8;j++){
+            if(person1[i].average1==person1[j].average){
+                person1[i].location=j;
+            }
+        }
+    }
+    for(int i=0;i<8;i++){
+        cout<<person1[i].location<<" ";
+    }
+    ofstream out("/Users/s20181106117/Desktop/vvv.txt");
+    if(out.is_open())
+    {
+        for(int i=0;i<8;i++)
+        {
+            out<<setw(5)<<person1[person1[i].location].numbe;
+            out<<setw(20)<<person1[person1[i].location].college;
+            out<<setw(10)<<person1[person1[i].location].name;
+            out<<setw(10)<<"排名:"<<i+1<<"    "<<"平均分:"<<person1[i].average1<<endl;
+        }
+        out.close();
+    }
+    return 0;
+}
+

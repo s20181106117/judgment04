@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+#define peoplenum 30
+using namespace std;
+struct person1
+{
+    string numbe;
+    string name;
+    string college;
+    double average;
+    double score[7];
+}person1[peoplenum];
+struct person2
+{
+    char name[10];
+}person2[7];
+int main()
+{
+    ifstream in1("/Users/s20181106117/Desktop/in1.txt");
+    ifstream in2("/Users/s20181106117/Desktop/in2.txt");
+    if(in1.is_open())
+    {
+        for(int i=0;i<peoplenum;i++)
+        {
+            in1>>person1[i].numbe;
+            in1>>person1[i].name;
+            in1>>person1[i].college;
+        }
+        in1.close();
+    }
+    if(in2.is_open())
+    {
+        for(int j=0;j<peoplenum+1;j++){
+            if(j==0){
+                for(int i=0;i<7;i++){
+                    in2>>person2[i].name;
+                    }
+                }
+       else{
+                for(int k=0;k<7;k++)
+                {
+                in2>>person1[j-1].score[k];
+                }
+            }
+        }
+         in2.close();
+     }
+        for(int k=0;k<peoplenum;k++){
+            for(int i=0;i<6;i++){
+                for(int j=0;j<6;j++){
+                    double m;
+                    if(person1[k].score[j]<person1[k].score[j+1]){
+                      m=person1[k].score[j];
+                      person1[k].score[j]=person1[k].score[j+1];
+                      person1[k].score[j+1]=m;
+                      }
+                    }
+                }
+            }
+            int h;
+        for(int i=0;i<peoplenum;i++){
+            h=0;
+            for(int j=1;j<6;j++){
+                h=h+person1[i].score[j];
+            }
+                person1[i].average=h*1.0/5;
+            }
+    double x;
+    string numbe1;
+    string name1;
+    string college1;
+    for(int i=0;i<peoplenum-1;i++){
+        for(int j=0;j<peoplenum-1;j++){
+            if(person1[j].average<person1[j+1].average){
+                x=person1[j].average;
+                person1[j].average=person1[j+1].average;
+                person1[j+1].average=x;
+                numbe1=person1[j].numbe;
+                person1[j].numbe=person1[j+1].numbe;
+                person1[j+1].numbe=numbe1;
+                college1=person1[j].college;
+                person1[j].college=person1[j+1].college;
+                person1[j+1].college=college1;
+                name1=person1[j].name;
+                person1[j].name=person1[j+1].name;
+                person1[j+1].name=name1;
+            }
+        }
+    }
+    ofstream out("/Users/s20181106117/Desktop/jugement.csv");
+    if(out.is_open())
+    {
+        out<<left<<setw(10)<<"order"
+           <<left<<setw(10)<<"college"
+           <<left<<setw(10)<<"name"
+           <<left<<setw(10)<<"ranking"
+           <<left<<setw(10)<<"average"<<endl;
+        for(int i=0;i<peoplenum;i++)
+        {
+          out<<left<<setw(10)<<person1[i].numbe;
+          out<<left<<setw(10)<<person1[i].college;
+          out<<left<<setw(10)<<person1[i].name;
+          out<<left<<setw(10)<<i+1<<person1[i].average<<endl;
+        }
+        out.close();
+    }
+        return 0;
+}
+
